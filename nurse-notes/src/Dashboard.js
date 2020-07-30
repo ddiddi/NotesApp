@@ -9,179 +9,126 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import TAppBar from './dash';
 import Firebase from "firebase";
 import config from "./config";
+import Fab from '@material-ui/core/Fab';
+import DescriptionIcon from '@material-ui/icons/Description'
+import DeleteIcon from '@material-ui/icons/Delete'
+import AddIcon from '@material-ui/icons/Add'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import Tmodal from './modal'
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    Firebase.initializeApp(config);
-
+    if (!Firebase.apps.length) {
+        Firebase.initializeApp(config);
+    } 
     this.state = {
-      developers: []
-    };
+        notes: []
+      };
+    
   }
-
   componentDidMount() {
     this.getUserData();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState !== this.state) {
-      this.writeUserData();
-    }
+    console.log("Component did update")
+
   }
 
-  writeUserData = () => {
-    Firebase.database()
-      .ref("/")
-      .set(this.state);
-    console.log("DATA SAVED");
-  };
+//   writeUserData = () => {
+//     Firebase.database()
+//       .ref("/")
+//       .set(this.state);
+//     console.log("DATA UPLOADED");
+//   };
 
   getUserData = () => {
-    let ref = Firebase.database().ref("/");
+    let ref = Firebase.database().ref("notes");
     ref.on("value", snapshot => {
       const state = snapshot.val();
       this.setState(state);
     });
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    let name = this.refs.name.value;
-    let role = this.refs.role.value;
-    let uid = this.refs.uid.value;
-
-    if (uid && name && role) {
-      const { developers } = this.state;
-      const devIndex = developers.findIndex(data => {
-        return data.uid === uid;
-      });
-      developers[devIndex].name = name;
-      developers[devIndex].role = role;
-      this.setState({ developers });
-    } else if (name && role) {
-      const uid = new Date().getTime().toString();
-      const { developers } = this.state;
-      developers.push({ uid, name, role });
-      this.setState({ developers });
-    }
-
-    this.refs.name.value = "";
-    this.refs.role.value = "";
-    this.refs.uid.value = "";
-  };
-
-  removeData = developer => {
-    const { developers } = this.state;
-    const newState = developers.filter(data => {
-      return data.uid !== developer.uid;
+  removeData = (note) => {
+    const notes = this.state;
+    var newState = {};
+    const keys = Object.keys(this.state);
+    const remKeys = keys.slice(1);
+    const newStater = remKeys.filter(key => {
+        if (notes[key].uid !== note.uid) {
+            newState[key] = notes[key];
+        }
     });
-    this.setState({ developers: newState });
-  };
-
-  updateData = developer => {
-    this.refs.uid.value = developer.uid;
-    this.refs.name.value = developer.name;
-    this.refs.role.value = developer.role;
+    console.log(newState);
+    this.setState({ notes: newState});
+    console.log(notes);
+    Firebase.database()
+      .ref("notes")
+      .set(newState);
+    
   };
 
   render() {
-    const { developers } = this.state;
+    const notes = this.state;
+
+    const keys = Object.keys(this.state);
+    const remKeys = keys.slice(1);
     return (
-    <Container component="main" maxWidth="md">
+    <Container component="main" maxWidth="false" disableGutters="true">
+    <TAppBar/>
       <CssBaseline />
         <Paper 
             elevation = {3}
             style={{ 
-                padding: 40, 
-                margin: 0, 
+                padding: 10, 
+                margin: 20, 
                 backgroundColor: '#fafafa' ,
                 marginTop: 80,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center'
-                }}
-        >
-            <Grid container>
-      <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
-        <TextField
-          placeholder="Add Todo here"
-          fullWidth
-        />
-      </Grid>
-      <Grid xs={2} md={1} item>
-        <Button
-          fullWidth
-          color="secondary"
-          variant="outlined"
-        >
-          Add
-        </Button>
-      </Grid>
-    </Grid>
-          <div className="row">
-            <div className="col-xl-12">
-              {developers.map(developer => (
-                <div
-                  key={developer.uid}
-                  className="card float-left"
-                  style={{ width: "18rem", marginRight: "1rem" }}
-                >
-                  <div className="card-body">
-                    <h5 className="card-title">{developer.name}</h5>
-                    <p className="card-text">{developer.role}</p>
-                    <button
-                      onClick={() => this.removeData(developer)}
-                      className="btn btn-link"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      onClick={() => this.updateData(developer)}
-                      className="btn btn-link"
-                    >
-                      Edit
-                    </button>
-                  </div>
+                }}>
+            <Container
+            size="md">
+            <List dense={true}>
+            {remKeys.map(key => (
+                <div key={notes[key].uid}>
+                <input type="hidden" ref="uid" />
+                <ListItem button divider>
+                    <ListItemAvatar>
+                    <Avatar>
+                      <DescriptionIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={notes[key].title}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete" onClick={() => this.removeData(notes[key])}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
                 </div>
-              ))}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xl-12">
-              <h1>Add new team member here</h1>
-              <form onSubmit={this.handleSubmit}>
-                <div className="form-row">
-                  <input type="hidden" ref="uid" />
-                  <div className="form-group col-md-6">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      ref="name"
-                      className="form-control"
-                      placeholder="Name"
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label>Role</label>
-                    <input
-                      type="text"
-                      ref="role"
-                      className="form-control"
-                      placeholder="Role"
-                    />
-                  </div>
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  Save
-                </button>
-              </form>
-            </div>
-          </div>
+            ))}
+            </List>
+            </Container>
+          
+        <Tmodal/>
         </Paper>
+        
         </Container>
     );
   }

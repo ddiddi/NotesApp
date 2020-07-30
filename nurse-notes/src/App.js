@@ -5,8 +5,14 @@ import Dashboard from './Dashboard'
 import BaseList from './BaseList'
 import ChipsArray from './chips'
 import TModal from './modal'
+import TAppBar from './dash'
 import './App.css';
 import { Switch, Route } from 'react-router-dom';
+
+import withFirebaseAuth from 'react-with-firebase-auth'
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import firebaseConfig from './firebaseConfig';
 
 function App() {
   return (
@@ -18,6 +24,7 @@ function App() {
       <Route path='/list' component={BaseList} />
       <Route path='/chips' component={ChipsArray} />
       <Route path='/modal' component={TModal} />
+      <Route path='/dash' component={TAppBar} />
       </Switch>
     </main>
   );

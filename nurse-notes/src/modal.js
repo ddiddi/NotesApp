@@ -7,6 +7,10 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add'
+import Input from '@material-ui/core/Input'
+import NoteForm from './NoteForm'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -39,9 +43,10 @@ export default function TModal() {
 
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
-        react-transition-group
-      </button>
+        <Fab color="primary" aria-label="add" onClick={handleOpen}>
+          <AddIcon />
+        </Fab>
+
       <Modal
         size='xl'
         aria-labelledby="transition-modal-title"
@@ -57,32 +62,8 @@ export default function TModal() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-          <TextField
-          label="Title"
-          fullWidth
-          id="outlined-margin-none"
-          className={classes.textField}
-        />
-        
-        <TextField
-          id="outlined-multiline-static"
-          label="Note"
-          multiline
-          fullWidth
-          rows={10}
-        />
-
-        <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleClose}
-          >
-            Submit
-          </Button>
-        
+            <h2> NurseNote</h2>
+            <NoteForm/>
         </div>
         </Fade>
       </Modal>

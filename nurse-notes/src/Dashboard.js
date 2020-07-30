@@ -1,25 +1,15 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import TAppBar from './dash';
 import Firebase from "firebase";
 import config from "./config";
-import Fab from '@material-ui/core/Fab';
 import DescriptionIcon from '@material-ui/icons/Description'
 import DeleteIcon from '@material-ui/icons/Delete'
-import AddIcon from '@material-ui/icons/Add'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
@@ -66,10 +56,11 @@ class Dashboard extends React.Component {
     var newState = {};
     const keys = Object.keys(this.state);
     const remKeys = keys.slice(1);
-    const newStater = remKeys.filter(key => {
+    remKeys.filter(key => {
         if (notes[key].uid !== note.uid) {
             newState[key] = notes[key];
         }
+
     });
     console.log(newState);
     this.setState({ notes: newState});

@@ -3,14 +3,12 @@ import React, { Component } from 'react';
 import { withFirebase } from '../Firebase';
 
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import DescriptionIcon from '@material-ui/icons/Description'
 import DeleteIcon from '@material-ui/icons/Delete'
-import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
@@ -20,75 +18,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-// import Tmodal from './Modal'
+import NoteForm from '../Home/NoteForm'
 
-//import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add'
-import NoteForm from './NoteForm'
-
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    minWidth: '90vw',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[2],
-    padding: theme.spacing(10),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-function TModal() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-        <Fab color="primary" aria-label="add" onClick={handleOpen}>
-          <AddIcon />
-        </Fab>
-
-      <Modal
-        size='xl'
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <h2> NurseNote</h2>
-            <NoteForm/>
-        </div>
-        </Fade>
-      </Modal>
-    </div>
-  );
-}
 
 function Copyright() {
   return (
@@ -105,7 +36,7 @@ function Copyright() {
 
 
 
-class Dashboard extends Component {
+class AddNote extends Component {
   constructor(props) {
     super(props);
  
@@ -117,25 +48,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-
-    this.props.firebase.notes("ddd").on('value', snapshot => {
-      const notesObject = snapshot.val();
- 
-      const notesList = Object.keys(notesObject).map(key => ({
-        ...notesObject[key],
-        uid: key,
-      }));
- 
-      this.setState({
-        notes: notesList,
-        loading: false,
-      });
-    });
   }
-
-  componentWillUnmount() {
-    this.props.firebase.notes().off();
-  }  
 
   removeData = (note) => {
       console.log(note);
@@ -149,11 +62,7 @@ class Dashboard extends Component {
       const { notes, loading } = this.state; 
       
     return (
-        <div>
-        {loading && <div>Loading ...</div>}
-        {/* <NoteList notes={notes} /> */}
-
-    <Container component="main" maxWidth="sm">
+      <Container component="main" maxWidth="sm">
       <CssBaseline />
       <Paper 
         elevation = {3}
@@ -199,24 +108,19 @@ class Dashboard extends Component {
             </List>
             </Container>
             </Container>
-            <Button disableElevation color="primary" href="/notes">
-          New Note
-          </Button>
+            <TModal/>
       </Paper>
       <Box mt={8}>
         <Copyright />
       </Box>
     </Container>
-
-
-      </div>
     );
   }
 }
 
  
 
-export default withFirebase(Dashboard);
+export default withFirebase(AddNote);
 
 
 

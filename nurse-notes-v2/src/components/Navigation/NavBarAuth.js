@@ -143,11 +143,17 @@ export default function NavBarAuth() {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
           <Button disableElevation variant="contained" color="primary" href="/account">
+          Home
+          </Button>
+          <Button disableElevation variant="contained" color="primary" href="/home">
           Settings
           </Button>
           <SignOutButton />
           </div>
           <div className={classes.sectionMobile}>
+          <Button disableElevation variant="contained" color="primary" href="/home">
+          Home
+          </Button>
           <Button disableElevation variant="contained" color="primary" href="/account">
           Settings
           </Button>

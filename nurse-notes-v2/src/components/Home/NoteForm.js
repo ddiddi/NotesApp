@@ -24,6 +24,8 @@ const INITIAL_STATE = {
 class NoteFormBase extends Component {
 constructor(props) {
   super(props);
+  console.log("PROPS");
+  console.log(props)
   this.state = { ...INITIAL_STATE };
 }
 
@@ -38,6 +40,7 @@ onSubmit = event => {
         }).catch(error => {
       this.setState({ error });
     });
+  this.props.history.push('/home')
 };
 
 onChange = event => {

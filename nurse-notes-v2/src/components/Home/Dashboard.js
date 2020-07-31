@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
  
 import { withFirebase } from '../Firebase';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
 
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
@@ -30,6 +32,13 @@ import Fade from '@material-ui/core/Fade';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add'
 import NoteForm from './NoteForm'
+
+
+const DashboardPage = () => (
+  <div>
+    <Dashboard />
+  </div>
+);
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -105,7 +114,7 @@ function Copyright() {
 
 
 
-class Dashboard extends Component {
+class DashboardBase extends Component {
   constructor(props) {
     super(props);
  
@@ -142,7 +151,8 @@ class Dashboard extends Component {
   }
 
   updateNote = (note) => {
-    console.log(note);
+    console.log(note)
+    this.props.history.push('/notes/'+note.uid);
   }
  
   render() {
@@ -214,9 +224,14 @@ class Dashboard extends Component {
   }
 }
 
- 
+const Dashboard = compose(
+  withRouter,
+  withFirebase,
+  )(DashboardBase);
 
-export default withFirebase(Dashboard);
+export default DashboardPage;
+export { Dashboard };
+
 
 
 

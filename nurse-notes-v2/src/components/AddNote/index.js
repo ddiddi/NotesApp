@@ -4,7 +4,7 @@ import { withAuthorization } from '../Session';
 import AddNote from './AddNote'
 import NoteForm from '../Home/NoteForm'
 
-const AddNotePage = () => (
+const AddNotePage = ({ match, location }) => (
       <div>
         <NoteForm />
       </div>

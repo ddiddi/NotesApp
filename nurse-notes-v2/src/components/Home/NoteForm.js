@@ -25,8 +25,26 @@ class NoteFormBase extends Component {
 constructor(props) {
   super(props);
   console.log("PROPS");
-  console.log(props)
   this.state = { ...INITIAL_STATE };
+}
+
+componentDidMount() {
+  if (this.props.match.params.uid == 123123) {
+
+  } else {
+  this.props.firebase.note(this.props.match.params.uid).on('value', snapshot => {
+    const notesObject = snapshot.val();
+    console.log(notesObject);
+
+        this.setState({
+          title: notesObject.title,
+          note: notesObject.note,
+        });
+    
+
+  });
+}
+  
 }
 
 onSubmit = event => {

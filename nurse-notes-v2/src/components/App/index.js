@@ -32,7 +32,7 @@ const App = () => (
       <Route path={ROUTES.HOME} component={HomePage} />
       <Route path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route path={ROUTES.ADMIN} component={AdminPage} />
-      <Route path={ROUTES.ADDNOTE} component={AddNotePage} />
+      <Route path="/notes/:uid" component={AddNotePage} />
     </div>
   </Router>
 );

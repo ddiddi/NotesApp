@@ -21,24 +21,33 @@ const INITIAL_STATE = {
   last_modified: ''
 };
 
-class NoteFormBase extends Component {
+class NoteForm extends Component {
 constructor(props) {
   super(props);
-  console.log("PROPS");
   this.state = { ...INITIAL_STATE };
 }
 
 componentDidMount() {
-  if (this.props.match.params.uid == 123123) {
+  if (this.props.match.params.uid == 0 || this.props.match.params.uid == null) {
+    this.setState({
+      email: this.props.email.slice(0,-4), 
+      title: '',
+      note: '',
+      last_modified: new Date().getTime().toString(),
+    });
 
   } else {
-  this.props.firebase.note(this.props.match.params.uid).on('value', snapshot => {
+  this.props.firebase.note(this.props.email.slice(0,-4), this.props.match.params.uid).on('value', snapshot => {
     const notesObject = snapshot.val();
+    console.log("MOUNT");
     console.log(notesObject);
+    
 
         this.setState({
+          email: this.props.email.slice(0,-4), 
           title: notesObject.title,
           note: notesObject.note,
+          last_modified: new Date().getTime().toString(),
         });
     
 
@@ -50,7 +59,7 @@ componentDidMount() {
 onSubmit = event => {
   const { title, note } = this.state;
   const last_modified = new Date().getTime().toString();;
-  const email = "ddd";
+  const email = this.props.email.slice(0,-4);
   this.props.firebase
     .doCreateNote(email, title, note, last_modified)
     .then(() => {
@@ -122,11 +131,6 @@ render() {
 }
 
 
-const NoteForm = compose(
-  withRouter,
-  withFirebase,
-  )(NoteFormBase);
-
-export default NotePage;
-
-export { NoteForm };
+export default withRouter(
+  withFirebase(
+    NoteForm));

@@ -57,47 +57,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TModal() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-        <Fab color="primary" aria-label="add" onClick={handleOpen}>
-          <AddIcon />
-        </Fab>
-
-      <Modal
-        size='xl'
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <h2> NurseNote</h2>
-            <NoteForm/>
-        </div>
-        </Fade>
-      </Modal>
-    </div>
-  );
-}
 
 function Copyright() {
   return (
@@ -114,7 +73,7 @@ function Copyright() {
 
 
 
-class DashboardBase extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
  
@@ -125,21 +84,36 @@ class DashboardBase extends Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
-
-    this.props.firebase.notes("ddd").on('value', snapshot => {
+    this.setState({ loading: false });
+    const mail = this.props.email.slice(0, -4);
+    console.log(mail);
+    this.props.firebase.notes(mail).on('value', snapshot => {
       const notesObject = snapshot.val();
- 
-      const notesList = Object.keys(notesObject).map(key => ({
-        ...notesObject[key],
-        uid: key,
-      }));
- 
-      this.setState({
-        notes: notesList,
-        loading: false,
-      });
+      if (notesObject == null) {
+        console.log(notesObject)
+        console.log("NULL");
+
+        this.setState({
+          notes: [],
+          loading: false,
+        });
+
+
+      } else {
+        console.log(notesObject)
+        const notesList = Object.keys(notesObject).map(key => ({
+          ...notesObject[key],
+          uid: key,
+        }));
+
+        this.setState({
+          notes: notesList,
+          loading: false,
+        });
+
+      }
     });
+
   }
 
   componentWillUnmount() {
@@ -151,7 +125,6 @@ class DashboardBase extends Component {
   }
 
   updateNote = (note) => {
-    console.log(note)
     this.props.history.push('/notes/'+note.uid);
   }
  
@@ -200,7 +173,7 @@ class DashboardBase extends Component {
                     }
                   />
                   <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete" onClick={()=>this.props.firebase.doRemoveNote("ddd",note.title, note.note, note.last_modified)} >
+                    <IconButton edge="end" aria-label="delete" onClick={()=>this.props.firebase.doRemoveNote(note.email,note.title, note.note, note.last_modified)} >
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
@@ -209,7 +182,7 @@ class DashboardBase extends Component {
             </List>
             </Container>
             </Container>
-            <Button disableElevation color="primary" href="/notes">
+            <Button disableElevation color="primary" href="/notes/0">
           New Note
           </Button>
       </Paper>
@@ -224,16 +197,9 @@ class DashboardBase extends Component {
   }
 }
 
-const Dashboard = compose(
-  withRouter,
-  withFirebase,
-  )(DashboardBase);
-
-export default DashboardPage;
-export { Dashboard };
-
-
-
+export default withRouter(
+  withFirebase(
+    Dashboard));
 
 
 

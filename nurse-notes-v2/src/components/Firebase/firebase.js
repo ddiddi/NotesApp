@@ -35,20 +35,21 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
 
     doCreateNote = (email, title, note, last_modified) =>
-    this.db.ref(`notes/${email}/${last_modified}`).set({
+    this.db.ref(`notes/${email}/${title}`).set({
+        email: email,
         title: title,
         note: note,
         last_modified: last_modified
     });
 
     doRemoveNote = (email, title, note, last_modified) =>
-    this.db.ref(`notes/${email}/${last_modified}`).set(null);
+    this.db.ref(`notes/${email}/${title}`).set(null);
     // *** User API ***
  
     user = uid => this.db.ref(`users/${uid}`);
     users = () => this.db.ref('users');
     notes = email => this.db.ref(`notes/${email}`);
-    note = uid => this.db.ref(`notes/ddd/${uid}`);
+    note = (email, title) => this.db.ref(`notes/${email}/${title}`);
 }
 
 export default Firebase;

@@ -2,13 +2,13 @@ import React from 'react';
  
 import { AuthUserContext} from '../Session';
 import { withAuthorization } from '../Session';
-import AddNote from './AddNote'
 import NoteForm from '../Home/NoteForm'
 
 const AddNotePage = ({ match, location }) => (
   <AuthUserContext.Consumer>
     {authUser => (
 
+      // Sending email to note form to be indexed and redered
       <div>
         <NoteForm email = {authUser.email} />
       </div>

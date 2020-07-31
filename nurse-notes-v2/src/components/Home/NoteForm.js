@@ -1,17 +1,11 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
 
 import { withFirebase } from '../Firebase';
  
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-const NotePage = () => (
-  <div>
-    <NoteForm />
-  </div>
-);
 
 
 const INITIAL_STATE = {
@@ -28,7 +22,7 @@ constructor(props) {
 }
 
 componentDidMount() {
-  if (this.props.match.params.uid == 0 || this.props.match.params.uid == null) {
+  if (this.props.match.params.uid === 0 || this.props.match.params.uid == null) {
     this.setState({
       email: this.props.email.slice(0,-4), 
       title: '',
@@ -76,10 +70,8 @@ onChange = event => {
 
 render() {
   const {
-    email,
     title,
     note,
-    last_modified
   } = this.state;
 
   const isInvalid =

@@ -2,10 +2,8 @@ import React, { Component } from 'react';
  
 import { withFirebase } from '../Firebase';
 import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
 
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
@@ -22,41 +20,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-// import Tmodal from './Modal'
-
-//import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add'
-import NoteForm from './NoteForm'
-
-
-const DashboardPage = () => (
-  <div>
-    <Dashboard />
-  </div>
-);
-
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    minWidth: '90vw',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[2],
-    padding: theme.spacing(10),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 
 function Copyright() {
   return (
@@ -86,7 +49,6 @@ class Dashboard extends Component {
   componentDidMount() {
     this.setState({ loading: false });
     const mail = this.props.email.slice(0, -4);
-    console.log(mail);
     this.props.firebase.notes(mail).on('value', snapshot => {
       const notesObject = snapshot.val();
       if (notesObject == null) {
@@ -200,15 +162,3 @@ class Dashboard extends Component {
 export default withRouter(
   withFirebase(
     Dashboard));
-
-
-
-// const Dash = () => (
-//     <AuthUserContext.Consumer>
-//       {authUser => (
-        
-
-//       )}
-//     </AuthUserContext.Consumer>
-            
-//   );

@@ -11,7 +11,6 @@ import SignInPage from '../SignIn';
 import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
-import AdminPage from '../Admin';
 import AddNotePage from '../AddNote';
 
 import * as ROUTES from '../../constants/routes';
@@ -21,7 +20,7 @@ const App = () => (
   <Router>
     <div>
       <Navigation />
- 
+      {/* Main link routing in the following part */}
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />
@@ -31,7 +30,7 @@ const App = () => (
       />
       <Route path={ROUTES.HOME} component={HomePage} />
       <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-      <Route path={ROUTES.ADMIN} component={AdminPage} />
+      {/* Different path format to capture unique id of note in address */}
       <Route path="/notes/:uid" component={AddNotePage} />
     </div>
   </Router>

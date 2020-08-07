@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
 
-import Chip from '@material-ui/core/Chip';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
@@ -87,14 +86,6 @@ class Dashboard extends Component {
       console.log(note);
   }
 
-  updateSortNote = (notes) => {
-    console.log(notes)
-    const reversed = notes.reverse()
-    this.setState({
-      notes: reversed
-    });
-  }
-
   updateNote = (note) => {
     this.props.history.push('/notes/'+note.uid);
   }
@@ -123,18 +114,7 @@ class Dashboard extends Component {
       >
         <Container
             size="xl">
-              <Chip
-        avatar={<Avatar>S</Avatar>}
-        label="Reverse Sort"
-        onClick={()=>this.updateSortNote(notes)}
-        variant="outlined"
-      />
-            <Chip
-        avatar={<Avatar>T</Avatar>}
-        label="Tag Filter"
-        onClick={()=>this.updateSortNote(notes)}
-        variant="outlined"
-      />
+
             <Container
             style={{
                 maxHeight:500,

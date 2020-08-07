@@ -19,13 +19,20 @@ class Firebase {
 
         this.auth = app.auth();
         this.db = app.database();
+        this.googleProvider = new app.auth.GoogleAuthProvider();
+
     }
 
+    // createUser
     doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
 
+    // get authUser based on email and pass
     doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
+
+    doSignInWithGoogle = () =>
+    this.auth.signInWithPopup(this.googleProvider);
 
     doSignOut = () => this.auth.signOut();
 
@@ -34,6 +41,7 @@ class Firebase {
     doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
 
+    // createNote also used for editing
     doCreateNote = (email, title, note, last_modified) =>
     this.db.ref(`notes/${email}/${title}`).set({
         email: email,
@@ -42,13 +50,20 @@ class Firebase {
         last_modified: last_modified
     });
 
+    // deleteNote
     doRemoveNote = (email, title, note, last_modified) =>
     this.db.ref(`notes/${email}/${title}`).set(null);
     // *** User API ***
  
+    //getUser
     user = uid => this.db.ref(`users/${uid}`);
+    
+    // getUsers
     users = () => this.db.ref('users');
+    // getNotes
     notes = email => this.db.ref(`notes/${email}`);
+    
+    // getNote
     note = (email, title) => this.db.ref(`notes/${email}/${title}`);
 }
 

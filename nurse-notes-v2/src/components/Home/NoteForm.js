@@ -22,7 +22,7 @@ constructor(props) {
 }
 
 componentDidMount() {
-  if (this.props.match.params.uid === 0 || this.props.match.params.uid == null) {
+  if (this.props.match.params.uid == 0 || this.props.match.params.uid == null) {
     this.setState({
       email: this.props.email.slice(0,-4), 
       title: '',
